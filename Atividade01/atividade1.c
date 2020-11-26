@@ -8,8 +8,7 @@
 
 void bresenham1(int x1, int y1, int x2, int y2){        
         int slope;
-        int dx, dy, incE, incNE, d, x, y;
-        // Onde inverte a linha x1 > x2       
+        int dx, dy, incE, incNE, d, x, y; 
         if (x1 > x2 && y1 > y2){
             bresenham1(x2, y2, x1, y1);
              return;
@@ -24,7 +23,7 @@ void bresenham1(int x1, int y1, int x2, int y2){
         else{            
            slope = 1;
         }
-        // Constante de Bresenham
+  
         incE = 2 * dy;
         incNE = 2 * dy - 2 * dx;
         d = 2 * dy - dx;
@@ -38,7 +37,11 @@ void bresenham1(int x1, int y1, int x2, int y2){
     int tam;
     if (x2 - x1 > 0){
         tam = x2 - x1;
-    }else{
+    }
+    else if(x2-x1==0){
+        tam = y2-y1;
+    }
+    else{
         tam = -(x2 - x1);
     }
 
@@ -48,20 +51,40 @@ void bresenham1(int x1, int y1, int x2, int y2){
     
     int i =0;
         
-        while(x1 < x2){
-            if (d < 0){
-              d = d + incE;
-            }
-            else{
-              d = d + incNE;
-              y = y + slope;
+        
+        if(x2-x1 == 0){
+            while(y1 < y2){
+                if (d < 0){
+                  d = d + incE;
+                }
+                else{
+                  d = d + incNE;
+                  x = x + slope;
+                }
+                
+                vecPk[i] = d;
+                vecX[i] = x1;
+                vecY[i] = y1;
+                i++;
+                y1++;
             }
             
-        vecPk[i] = d;
-        vecX[i] = x1;
-        vecY[i] = y;
-        i++;
-        x1++;
+        }else{
+            while(x1 < x2){
+                if (d < 0){
+                  d = d + incE;
+                }
+                else{
+                  d = d + incNE;
+                  y = y + slope;
+                }
+                
+            vecPk[i] = d;
+            vecX[i] = x1;
+            vecY[i] = y;
+            i++;
+            x1++;
+            }
         }
         
     printf("X  | ");
