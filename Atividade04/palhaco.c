@@ -3,9 +3,8 @@
 #include <stdlib.h>
 #include <math.h>
 
-float angX = 0.0;
-float angY = 0.0;
-int opcao = 0;
+float angulo = 20.0;
+float tempoDeAnimacao = 100;
 
 void init(){
      glClearColor(0.0,0.0,0.0,0.0);
@@ -16,42 +15,53 @@ void init(){
      glPushMatrix();
 }
 
-
 void desenhaCabeca(){
-    glColor3f(0.0,0.0,1.0);
-    glutWireSphere(2.0, 20, 20);
+    glPushMatrix();
+        glColor3f(1.0,1.0,1.0);
+        glRotatef(angulo,0.0,1.0,0.0);
+        glutWireSphere(2.0, 20, 20);
+    glPopMatrix();
 }
 
 void desenhaChapeu(){
-    glColor3f(0.0,1.0,0.0);
-    glRotatef(30.0, 0.0, 0.0, 1.0);
-    glRotatef(-90.0, 1.0, 0.0, 0.0);
-    glTranslatef(0.0, 0.0, 2.0);
-    glutWireCone(2.0,4.0,20,20);
-    glutWireTorus(0.2, 2.2, 10, 25);
+    glPushMatrix();
+        glColor3f(0.0,1.0,0.0);
+        glRotatef(angulo,0.0,1.0,0.0);
+        glRotatef(30.0, 0.0, 0.0, 1.0);
+        glRotatef(-90.0, 1.0, 0.0, 0.0);
+        glTranslatef(0.0, 0.0, 2.0);
+        glutWireCone(2.0,4.0,20,20);
+        glutWireTorus(0.2, 2.2, 10, 25);
+    glPopMatrix();
 }
 
 void desenhaNariz(){
+    glPushMatrix();
     glColor3f(1.0, 0.0, 0.0);
-    glTranslatef(0.0, 0.0, 4.0);
+    glRotatef(angulo,0.0,1.0,0.0);
+    glTranslatef(0.0, 0.0, 2.0);
     glutWireSphere(0.5, 20, 20);
+    glPopMatrix();
 }
 
 void desenhaCabeloEsquerda(){
     glPushMatrix();
         glColor3f(1.0, 0.0, 0.0);
+        glRotatef(angulo,0.0,1.0,0.0);
         glTranslatef(-2.5, 0.0, 0.0);
         glutWireSphere(0.5, 10, 10);
     glPopMatrix();
 
     glPushMatrix();
         glColor3f(1.0, 0.0, 0.0);
+        glRotatef(angulo,0.0,1.0,0.0);
         glTranslatef(-2.2, 0.7 , 0.0);
         glutWireSphere(0.5, 10, 10);
     glPopMatrix();
 
     glPushMatrix();
         glColor3f(1.0, 0.0, 0.0);
+        glRotatef(angulo,0.0,1.0,0.0);
         glTranslatef(-2.2, -0.7, 0.0);
         glutWireSphere(0.5, 10, 10);
     glPopMatrix();
@@ -60,18 +70,21 @@ void desenhaCabeloEsquerda(){
 void desenhaCabeloDireita(){
     glPushMatrix();
         glColor3f(1.0, 0.0, 0.0);
+        glRotatef(angulo,0.0,1.0,0.0);
         glTranslatef(2.5, 0.0, 0.0);
         glutWireSphere(0.5, 10, 10);
     glPopMatrix();
 
     glPushMatrix();
         glColor3f(1.0, 0.0, 0.0);
+        glRotatef(angulo,0.0,1.0,0.0);
         glTranslatef(2.2, 0.7 , 0.0);
         glutWireSphere(0.5, 10, 10);
     glPopMatrix();
 
     glPushMatrix();
         glColor3f(1.0, 0.0, 0.0);
+        glRotatef(angulo,0.0,1.0,0.0);
         glTranslatef(2.2, -0.7, 0.0);
         glutWireSphere(0.5, 10, 10);
     glPopMatrix();
@@ -88,62 +101,22 @@ void display()
     glPushMatrix();
 
     desenhaCabeca();
-
-    glPushMatrix();
-        desenhaChapeu();
-    glPopMatrix();
-
-    glPushMatrix();
-        desenhaNariz();
-    glPopMatrix();
-    
-
+    desenhaChapeu();
+    desenhaNariz();
     desenhaCabeloEsquerda();
     desenhaCabeloDireita();
 
     glutSwapBuffers();
 }
 
-void anima()
+void animate(int value)
 {
-    switch (opcao) {
-        case 1:
-            angX+=5;
-            break;
-        case 2:
-            angX-=5;
-            break;
-        case 3:
-            angY+=5;
-            break;
-        case 4:
-            angY-=5;
-            break;
-        default:
-            break;
+    angulo += 5.0;
+    if(angulo > 360.0){
+        angulo -= 360.0;
     }
+    glutTimerFunc(tempoDeAnimacao, animate, 1);
     glutPostRedisplay();
-}
-
-void rotacoes(int key, int x, int y){
-     glutIdleFunc(anima);
-     switch (key){
-        case GLUT_KEY_UP :
-           opcao = 1;
-           break ;
-        case GLUT_KEY_DOWN :
-           opcao = 2;
-           break ;
-        case GLUT_KEY_LEFT :
-           opcao = 3;
-           break ;
-        case GLUT_KEY_RIGHT :
-           glutIdleFunc(NULL);
-           opcao = 4;
-           break ;
-        default:
-           break;
-     }
 }
 
 int main(int argc, char *argv[])
@@ -154,8 +127,7 @@ int main(int argc, char *argv[])
      glutInitWindowSize(600,600);
      glutCreateWindow("Palhaco Animado - OpenGL");
      glutDisplayFunc(display);
-     glutSpecialFunc(rotacoes);
-     glutIdleFunc(anima);
+     glutTimerFunc(5, animate, 1);
      init();
      glutMainLoop();
 }
