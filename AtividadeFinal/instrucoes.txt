@@ -1,0 +1,8 @@
+----------instruções----------
+Seta para cima         : Altera visão para padrão
+Seta para baixo        : Altera visão para visão inferior
+Seta para esquerda     : Move planetas para diração oposta
+Seta para direita      : Move planetas para direção padrão e acelera movimentação
+Mouse - Botão Esquerdo : Pausa animação
+Mouse - Botão Direito  : Retoma animação
+ 
